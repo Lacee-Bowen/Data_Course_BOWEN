@@ -1,0 +1,9 @@
+1. wc -l ../../Data/data-shell/data/pdb/m*.pdb
+
+2. wc -l ../../Data/data-shell/data/pdb/m*.pdb > m-lines.txt
+
+3. cat animals.txt | cut -d "," -f 2 | sort -u > unique_animals.txt
+
+4. cat BioLog_Plate_Data.csv | cut -d "," -f 5 | sort | uniq > unique_C-substrates.txt
+
+6. find . -name "*txt" -exec awk '{ sum += $1 } END { print sum }' {} >> file_sums.txt \;
