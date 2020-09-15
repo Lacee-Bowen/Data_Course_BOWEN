@@ -71,6 +71,8 @@ plot(x=dat$Petal.Length, y=dat$Sepal.Length)
 plot(x=dat$Species, y=dat$Sepal.Length)
 
 
+iris
+
 # Object "Classes" ####
 
 #check the classes of these vectors
@@ -103,7 +105,7 @@ plot(nums_factor)
 plot(nums, main = "My Title", xlab = "My axis label", ylab = "My other axis label")
 
 
-?jpeg()
+jpeg(./spepal.lengthvswidth.jpeg)
 
 
 dev.off()
@@ -133,13 +135,18 @@ df1 # look at it...note column names are what we gave it.
 # Make a data frame from the first 20 rows of iris that has only Species and Sepal.Length columns
 # save it into an object called "dat3"
 
+data("iris")
+Species <- c(iris$Sepal.Length[1:20])
+Species
 
-
+spp <- c("Species","Sepal.Length")
+rows <- c(1:20)
+dat3 <- iris[rows,spp]
 
 
 # WRITING OUT FILES FROM R ####
 ?write.csv()
-
+write.csv(dat3,"./BOWEN_first_file.csv")
 
 # Write your new object "dat3" to a file named "LASTNAME_first_file.csv" in your PERSONAL git repository
 
@@ -166,17 +173,23 @@ for(i in levels(dat$Species)){
 
 
 # YOUR REMAINING HOMEWORK ASSIGNMENT (Fill in with code) ####
-
+dat <- iris
 # 1.  Make a scatterplot of Sepal.Length vs Sepal.Width. See if you can get the points to be colored by "Species"
-
+plot(x=dat$Sepal.Length,y=dat$Sepal.Width,col=dat$Species)
 
 # 2.  Write the code to save it (with meaningful labels) as a jpeg file
 
+jpeg("./Sepaldimensions.jpeg")
+plot(x=dat$Sepal.Length,y=dat$Sepal.Width,col=dat$Species, main="Sepal Dimensions", xlab="Sepal Length", ylab="Sepal Width")
+dev.off()
+
 
 # 3.  Subset the Iris data set to only include rows from the setosa and virginica Species
+ir <- iris[c(1:50,101:150),]
 
 
 # 4.  Write code to save this new subset as a .csv file called setosa_and_virginica.csv
+write.csv(ir, "setosa_and_virginica.csv")
 
 
 # 5.  Upload this R script (with all answers filled in and tasks completed) to canvas and GitHub
