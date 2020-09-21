@@ -24,8 +24,9 @@ lowest_performance <- Dframe$Year_Collected[index_dif]
 
 # Q5
 subset_Downstairs <- filter(Dframe,Lab == "Downstairs")
+jpeg(filename = "./Ben_DNA_over_time.jpeg")
 plot(x = as.POSIXct(subset_Downstairs$Date_Collected), y = subset_Downstairs$DNA_Concentration_Ben, xlab= "Date_Collected", ylab= "DNA_Concentration_Ben")
-
+dev.off()
 
 
 
