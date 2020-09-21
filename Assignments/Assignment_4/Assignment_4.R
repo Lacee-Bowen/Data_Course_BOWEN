@@ -30,7 +30,7 @@ png(filename = "./silly_boxplot.png")
 plot(x=(as.factor(df$Ecosystem)), y=df$Lat, xlab= "Ecosystem", ylab= "Lat", cex.lab=1, cex.axis-0.5, cex.main=1, cex.sub=1)
 dev.off()
 
-
+?as.factor
 
 
 
