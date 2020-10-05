@@ -43,7 +43,7 @@ maxhp_origional <- max(mtcars$hp)
 maxhp_automatic <- max(autosub$hp)
 maxhp_max200 <- max(displace$hp)
 
-write.table(c(maxhp_origional, maxhp_automatic, maxhp_max200), "hp_maximums.txt")
+write.table(c(maxhp_origional, maxhp_automatic, maxhp_max200),"hp_maximums.txt", row.names = c("Max Horsepower in mtcars dataset", "Max horsepower with automatic transmission", "Max horsepower with displacement <= 200"))
 
 
 # problem 12 use patchwork to combine the three graphs in to one image
