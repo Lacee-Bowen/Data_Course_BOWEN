@@ -10,6 +10,7 @@ ggplot(iris, aes(x=Sepal.Length, y=Petal.Length, color = Species)) +
   labs(title = "Sepal length vs petal length", subtitle = "for three iris species") +
   theme_minimal()
 dev.off()
+ggsave("iris_fig1.png")
 
 
 # below is plot two for the assignment
@@ -19,6 +20,7 @@ ggplot(iris, aes(x=Petal.Width, fill=Species))+
   theme_minimal()+
   labs(title= "Distribution of Petal Widths", subtitle = "for three iris species", x ="Petal Width")
 dev.off()
+ggsave("iris_fig2.png")
 
 
 # below is plot three
@@ -28,6 +30,7 @@ ggplot(iris, aes(x=Species, y=c(Petal.Width/Sepal.Width), fill=Species))+
   labs(title = "Sepal- to Petal-Width Ratio", subtitle = "for three iris species", x= "Species", y="Ratio of Sepal Width to Petal Width")+
   theme_minimal()
 dev.off()
+ggsave("iris_fig3.png")
 
 # below is for plot four
 png(filename = "iris_fig4.png")
@@ -43,6 +46,7 @@ ggplot(iris, aes(x=`inames`, y=length_norm, label=length_norm)) +
   #theme(axis.title.y=element_blank()
   theme(axis.text.y = element_blank(), axis.ticks = element_blank(), axis.title.y=element_blank())
 dev.off()
+ggsave("iris_fig4.png")
 
 
 
