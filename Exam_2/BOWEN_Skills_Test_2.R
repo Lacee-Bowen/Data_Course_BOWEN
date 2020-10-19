@@ -1,5 +1,4 @@
 library(tidyverse)
-library(zoo)
 library(ggplot2)
 
 landdata_df <- read.csv("./landdata-states.csv")
