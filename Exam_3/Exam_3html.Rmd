@@ -1,0 +1,126 @@
+---
+title: "Exam_3"
+author: "Lacee Bowen"
+date: "11/28/2020"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(modelr)
+library(GGally)
+library(ggplot2)
+library(dplyr)
+library(MASS)
+library(broom)
+```
+
+
+### College faculty salaries and total compensation records from 1995 are shown below. The salaries were based on rank, tier, and state. 
+
+##### There are three ranks: Assistant (not tenured), Associate (tenured), and Full (exceeding tenure).
+
+##### The tiers refer to the amount of funding devoted to research vs the amount of funding for teaching, with Tier I being universities that spend more on research than teaching and award PhD degrees.
+
+
+```{r, echo=FALSE, message=FALSE}
+# below are the two csv files to read in for the exam
+FacultySalaries_1995 <- read_csv("FacultySalaries_1995.csv")
+Juniper_Oils <- read_csv("Juniper_Oils.csv")
+```
+
+
+
+
+```{r task I, message=FALSE, warning=FALSE}
+##Task I, recreating fig1.png
+# renaming the text for the x axis
+FacultySalaries_1995 <- FacultySalaries_1995 %>% 
+  rename(Full = AvgFullProfSalary, Assoc = AvgAssocProfSalary, Assist = AvgAssistProfSalary)
+
+# creating one column which all of the following are in 
+combine_columns <- c("Full","Assoc","Assist")
+FacultySalaries_1995_long <- pivot_longer(FacultySalaries_1995, cols = combine_columns,
+                                          names_to = "Rank", 
+                        values_to = "Salary", names_prefix = "Avg")
+
+#getting rid of VIIB
+without_VIIB <- FacultySalaries_1995_long[-c(3463:3465), ]
+
+# the facet wrapped graph
+p1 <- ggplot(without_VIIB, aes(x=Rank, y=Salary, fill = Rank))+
+  geom_boxplot()+
+  labs(x = "Rank")+
+  facet_wrap(~Tier)+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p1
+ggsave(filename = "BOWEN_Fig_1.jpg", p1)
+```
+
+###### Fig 1 shows relative salary based on rank for three separate teirs. Generally, those who have been around for longer have higher salaries. Those at universities where more money is spent on research than teaching tend to make more money as well. 
+
+
+
+#### Table 1 below shows the influence of state, tier, and rank on Salary:
+```{r task II, message=FALSE}
+## Task II Anova test
+# below are three models testing the influence of state, tier, and rank on salary
+Anova <- aov(Salary ~ State + Tier + Rank, data = FacultySalaries_1995_long)
+Anova_summary <- summary(Anova)
+Anova_summary
+
+capture.output(Anova_summary, file = "./Salary_ANOVA_Summary.txt")
+```
+
+
+
+
+```{r, warning=FALSE, message=FALSE}
+## Task III cleaning Juniper Oils data using pivot_longer
+combine_columns2 <- c("alpha-pinene","para-cymene","alpha-terpineol","cedr-9-ene","alpha-cedrene","beta-cedrene","cis-thujopsene","alpha-himachalene","beta-chamigrene","cuparene","compound 1","alpha-chamigrene","widdrol","cedrol","beta-acorenol","alpha-acorenol","gamma-eudesmol","beta-eudesmol","alpha-eudesmol","cedr-8-en-13-ol","cedr-8-en-15-ol","compound 2","thujopsenal")
+Juniper_Oils_long <- pivot_longer(Juniper_Oils, combine_columns2, names_to = "Chemicals", values_to = "Concentration")
+```
+
+
+
+### Dead cedar trees were collected and the chemical composition of their essential oil content was measured. The hypothesis was that certain chemicals would degrade over time since they died in fires.
+
+```{r, message=FALSE}
+## Task IV duplicating fig2.png
+p2 <- ggplot(Juniper_Oils_long, aes(x= YearsSinceBurn, y= Concentration))+
+  geom_smooth()+
+  facet_wrap(~Chemicals, scales = "free")+
+  theme_minimal()
+p2
+ggsave(filename = "BOWEN_Fig_2.jpg", p2)
+```
+###### Fig 2 shows concentration of essential oil content based on the amount of years since the burn.
+
+
+
+```{r task V, message=FALSE, results='hide'}
+## Task V 
+# below is a model for which chemicals show concentrations that are significantly (significant, as in P < 0.05) affected by "Years Since Burn"
+mod4 <- glm(data = Juniper_Oils_long, formula = Concentration ~ YearsSinceBurn + Chemicals)
+summary(mod4)
+# below is a new data frame from mod4
+tidy(mod4)
+# get variables with p value less than 0.05
+mod4_significant <- tidy(mod4)
+mod4_significant
+filter(mod4_significant, p.value < 0.05)
+# this is the data frame only showing chemicals with significant p values
+sig_pvalue <- filter(mod4_significant, p.value < 0.05)
+```
+
+
+#### Table 2 below portrays the 10 chemicals that show concentrations that are significantly affected (having a p value < 0.05) by years since burn. 
+```{r}
+sig_pvalue
+```
+##### Only 10 out of 23 chemicals showed a significance in affect of concentrations years after the burn. 
+
+
